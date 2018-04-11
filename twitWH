@@ -1,0 +1,30 @@
+#!/bin/sh
+
+#define the counter file
+lineNo=$(cat "/home/pi/twit/counter")
+#define the input file
+file=/home/pi/twit/thoughts.csv
+
+if [ $lineNo -eq 320 ];
+then
+   lineNo=1
+fi
+
+#check counter rollover
+#echo $lineNo
+
+#method to read the line number of the file
+printLine=$(sed -n "${lineNo}p" "$file")
+
+#increment the counter
+lineNo=$((lineNo + 1))
+
+#save it output the file
+echo $lineNo > "/home/pi/twit/counter"
+
+#method to push the line content to the twitter API
+python /home/pi/twit/twit.py "${printLine}"
+
+#check iteration and line to print
+#echo $lineNo
+#echo $printLine
